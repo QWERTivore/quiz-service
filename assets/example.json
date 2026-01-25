@@ -1,0 +1,6 @@
+{
+  "type": "Programming",
+  "difficulty": "Easy",
+  "question": "What is a variable?",
+  "answer": "A variable is a named storage location that holds a value that can change during the execution of a program."
+}
