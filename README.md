@@ -17,6 +17,7 @@ It is an academic and portfolio-focused project designed to showcase Spring Boot
 <details>
 <summary>File Structure</summary>
 
+```
 src/main/java/com.cody.portfolio/
 │
 ├── QuizApp                           # Main
@@ -38,6 +39,7 @@ src/main/java/com.cody.portfolio/
 │       └── SortingStrategy           # A funtional interface that defines the contract for sorting an array of Question objects.
 └── utility/
     └── ArrayUtility                  # A generic utility class for performing array transformations.
+```
 
 </details>
 
