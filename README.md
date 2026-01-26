@@ -5,7 +5,7 @@ It organized as controller-service-domain and uses explicit, verb-noun patttern 
 The domain centers around Question objects, which has type, difficulty, prompt, answer, and a generated UUID (on instantiation).
 The project is intentionally lightweight and serves as an example of idiomatic Java and simple Spring Boot design.
 
-#QuizApp "IS NOT"
+# QuizApp "IS NOT"
 
 It is not a framework or a reusable library.
 Its purpose is to demonstrate backend development skills.
