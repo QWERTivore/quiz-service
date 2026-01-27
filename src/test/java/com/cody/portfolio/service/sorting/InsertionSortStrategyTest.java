@@ -63,12 +63,14 @@ public class InsertionSortStrategyTest {
 	void sortRunsOnSingleElementInQuestionArray() {
 		QuestionTypeComparator comparator = new QuestionTypeComparator();
 		InsertionSortStrategy insertionSort = new InsertionSortStrategy(comparator);
+		
 		Question question = new Question("a valid question", "a valid answer");
 		question.setType(Question.Type.Programming);
-		Question questionArray[] = new Question[1];
+		
+		Question questionArray[] = new Question[] {question};
 		insertionSort.sort(questionArray);
 		
-		assertSame(question, questionArray);
+		assertSame(question, questionArray[0]);
 	}
 	
 	@ParameterizedTest
