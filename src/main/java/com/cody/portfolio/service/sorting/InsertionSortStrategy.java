@@ -3,7 +3,6 @@ package com.cody.portfolio.service.sorting;
 import java.util.Comparator;
 import com.cody.portfolio.domain.Question;
 import org.springframework.stereotype.Component;
-import com.cody.portfolio.service.sorting.AbstractSortingStrategy;
 
 /**
  * A concrete sorting strategy that performs in-place insertion sort on an array of Question objects. 
@@ -31,7 +30,7 @@ public class InsertionSortStrategy extends AbstractSortingStrategy  {
 		for (int i = 1; i < questions.length; i++) {
 			
 			Question compare = questions[i]; // The element to insert.
-			int index = (i -1); // The index of the element to the left.
+			int index = (i - 1); // The index of the element to the left.
 			
 			// Shift while the left element is greater than compare.
 			while ((index >= 0) && comesBefore(questions[index], compare)) {

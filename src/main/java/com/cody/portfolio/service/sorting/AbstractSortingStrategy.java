@@ -2,7 +2,6 @@ package com.cody.portfolio.service.sorting;
 
 import java.util.Comparator;
 import com.cody.portfolio.domain.Question;
-import com.cody.portfolio.service.sorting.SortingStrategy;
 
 /**
  * The base class for sorting strategies used to sort an array of Questions objects.
