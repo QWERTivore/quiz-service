@@ -68,10 +68,12 @@ public class QuestionService {
 	 * @return An Optional containing the matching Question, or Optional.isEmpty() if no matching id's exist.
 	 */
 	public Optional<Question> getQuestion(UUID id) {
-		sort();
+		// Remove nulls before sorting.
+		Question[] myQuestions = ArrayUtility.removeNulls(this.questions.clone(), (int size) -> new Question[size]);
+		if (myQuestions.length > 1) sort(myQuestions);
 		
-		for (Question element : this.questions) {
-			if (element != null && element.getID().equals(id)) return Optional.of(element);
+		for (Question element : myQuestions) {
+			if (element.getID().equals(id)) return Optional.of(element);
 		}
 		return Optional.empty();
 	}
@@ -83,17 +85,23 @@ public class QuestionService {
 	 * @return An Optional containing the matching Question Type in a Question[], or Optional.isEmpty() if the type does not exist.
 	 */
 	public Optional<Question[]> getQuestions(Question.Type type) {
-		sort();
+		// Remove nulls before sorting.
+		Question[] myQuestions = ArrayUtility.removeNulls(this.questions.clone(), (int size) -> new Question[size]);
+		if (myQuestions.length > 1) sort(myQuestions);
+		
+		Question returnArray[] = new Question[myQuestions.length];
+		
+		// Add discovered types.
 		int count = 0;
-		Question[] result = new Question[this.questions.length];
-
-		for (Question element : this.questions) {
-			if (element != null && element.getType() == type) {
-				result[count++] = element;
+		for (Question element : myQuestions) {
+			if (element.getType() == type) {
+				returnArray[count++] = element;
 			}
 		}
 		if (count == 0) return Optional.empty();
-		return Optional.of(result);
+		
+		// Remove nulls from elements not added.
+		return Optional.of(ArrayUtility.removeNulls(returnArray, (int size) -> new Question[size]));
 	}
 	
 	/**
@@ -101,9 +109,11 @@ public class QuestionService {
 	 * @return An Optional containing all Questions in a Question[], or Optional.isEmpty() if no Questions have been stored.
 	 */
 	public Optional<Question[]> getAll() {
-		Question[] result = ArrayUtility.removeNulls(questions, (int count) -> new Question[count]);
-		if (result.length == 0) return Optional.empty();
-		return Optional.of(result);
+		// Remove nulls before sorting.
+		Question[] myQuestions = ArrayUtility.removeNulls(this.questions.clone(), (int size) -> new Question[size]);
+		if (myQuestions.length > 1) sort(myQuestions);
+		if (myQuestions.length == 0) return Optional.empty();
+		return Optional.of(myQuestions);
 	}
 	
 	/**
@@ -114,10 +124,9 @@ public class QuestionService {
 	 */
 	public boolean delete(UUID id) {
 		
-		for (int i = 0; i < questions.length; i++) {
-			if (questions[i] != null && questions[i].getID().equals(id)) {
-				questions[i] = null;
-				sort();
+		for (int i = 0; i < this.questions.length; i++) {
+			if (this.questions[i].getID().equals(id)) {
+				this.questions[i] = null;
 				return true;
 			}
 		}
@@ -127,7 +136,7 @@ public class QuestionService {
 	/**
 	 * A helper method that sorts the Questions in the array according to the sorting strategy used.
 	 */
-	private void sort() {
-		this.sortingStrategy.sort(questions);
+	private void sort(Question[] questionArray) {
+		this.sortingStrategy.sort(questionArray);
 	}
 }
