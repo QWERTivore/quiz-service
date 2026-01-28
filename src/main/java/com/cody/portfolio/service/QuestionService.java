@@ -2,10 +2,12 @@ package com.cody.portfolio.service;
 
 import java.util.UUID;
 import java.util.Optional;
-import com.cody.portfolio.domain.Question;
+
 import org.springframework.stereotype.Service;
-import com.cody.portfolio.utility.ArrayUtility;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import com.cody.portfolio.domain.Question;
+import com.cody.portfolio.utility.ArrayUtility;
 import com.cody.portfolio.service.sorting.AbstractSortingStrategy;
 
 /**
