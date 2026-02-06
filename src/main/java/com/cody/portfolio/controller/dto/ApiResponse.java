@@ -1,7 +1,7 @@
 package com.cody.portfolio.controller.dto;
 
 /**
- * A simple DTO to add context to service data.
+ * A simple DTO to shape the response of the API.
  */
 public class ApiResponse {
     private boolean success;
@@ -20,4 +20,3 @@ public class ApiResponse {
         return message;
     }
 }
-
