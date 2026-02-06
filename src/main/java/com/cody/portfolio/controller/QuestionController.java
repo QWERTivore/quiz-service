@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import com.cody.portfolio.domain.Question;
 import com.cody.portfolio.service.QuestionService;
 import com.cody.portfolio.controller.dto.ApiResponse;
+import com.cody.portfolio.controller.dto.QuestionBody;
 
 /**
  * This controller is responsible for managing Questions. 
@@ -25,8 +26,14 @@ public class QuestionController {
 	}
 	
 	@PostMapping("/set-single")
-	public ResponseEntity<ApiResponse> setQuestion(@RequestBody Question question) {
+	public ResponseEntity<ApiResponse> setQuestion(@RequestBody QuestionBody questionBody) {
 		try {
+			
+			Question question = new Question(
+					questionBody.question(),
+					questionBody.answer()
+			);
+					
 			boolean success = questionService.setQuestion(question);
 			
 			if (success) {
