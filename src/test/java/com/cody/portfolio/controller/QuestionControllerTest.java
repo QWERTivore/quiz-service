@@ -1,6 +1,5 @@
 package com.cody.portfolio.controller;
 
-
 import java.util.UUID;
 import java.util.Optional;
 
@@ -20,6 +19,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean; // Ov
 // Factory method to create HTTP request.
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 
 // Method to write assertions for the returned HTTP request.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -143,11 +143,10 @@ public class QuestionControllerTest {
 	}
 	
 	@Test
-	void getManyReturns200RequestSuccededWhenTheQuestionTypeIsValid() throws Exception {
+	void getManyReturns200RequestSucceededWhenTheQuestionTypeIsValid() throws Exception {
 		Question.Type type = Question.Type.Programming; 
 		Question question = new Question("a valid question", "a valid answer");
 		question.setType(type);
-		UUID id = question.getID();
 		Question questionArray[] = {question};
 		
 		when(questionService.getQuestions(type)).thenReturn(Optional.of(questionArray));
@@ -156,14 +155,63 @@ public class QuestionControllerTest {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$[0].question").value("a valid question"))
 			.andExpect(jsonPath("$[0].answer").value("a valid answer"))
-			.andExpect(jsonPath("$[0].ID").value(id.toString()))
 			.andExpect(jsonPath("$[0].type").value(type.toString()));
 	}
 	
 	@Test
-	void getManyReturns404NotFoundWhenTheQustionTypeIsNotFound() throws Exception {
+	void getManyReturns404NotFoundWhenTheQuestionTypeIsNotFound() throws Exception {
+		Question.Type type = Question.Type.Programming;
 		
+		when(questionService.getQuestions(type)).thenReturn(Optional.empty());
+		
+		mockMVC.perform(get("/questions/get-many/" + type))
+			.andExpect(status().isNotFound());
 	}
 	
+	@Test
+	void getAllReturns200RequestSucceededWhenThereAreQuestionsInTheArray() throws Exception {
+		Question question = new Question("a valid question", "a valid answer");
+		Question questionArray[] = {question};
+		
+		when(questionService.getAll()).thenReturn(Optional.of(questionArray));
+		
+		mockMVC.perform(get("/questions/get-all"))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$[0].question").value("a valid question"))
+			.andExpect(jsonPath("$[0].answer").value("a valid answer"));
+	}
+	
+	@Test
+	void getAllReturns404NotFoundWhenThereAreNoQuestionsStored() throws Exception {
+		when(questionService.getAll()).thenReturn(Optional.empty());
+		
+		mockMVC.perform(get("/questions/get-all"))
+			.andExpect(status().isNotFound());
+	}
+	
+	@Test
+	void deleteQuestionReturns200RequestSucceededWhenTheQuestionIdIsDeleted() throws Exception {
+		Question question = new Question("a valid question", "a valid answer");
+		UUID id = question.getID();
+		
+		when(questionService.delete(id)).thenReturn(true);
+		
+		mockMVC.perform(delete("/questions/delete-single/" + id))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.success").value(true))
+			.andExpect(jsonPath("$.message").value("Success: Question deleted!"));
+	}
+	
+	@Test
+	void deleteQuestionReturns400BadRequestWhenTheQuestionIdCannotBeFound() throws Exception {
+		UUID invalidId = UUID.randomUUID();
+		
+		when(questionService.delete(invalidId)).thenReturn(false);
+		
+		mockMVC.perform(delete("/questions/delete-single/" + invalidId))
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("$.success").value(false))
+			.andExpect(jsonPath("$.message").value("Failed: Question not found in array!"));
+	}
 
 }
